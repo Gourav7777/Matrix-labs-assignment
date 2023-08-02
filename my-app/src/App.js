@@ -1,24 +1,59 @@
 import logo from './logo.svg';
 import './App.css';
+import Sidebar from './Components/Sidebar';
+import TokenAddress from './Components/TokenAddress';
+import Footer from './Components/Footer';
+import { Box } from '@chakra-ui/react';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    
+    // <>
+    // <div className="App" style={{display:'flex'}}>
+    //   <Sidebar></Sidebar>
+    //   <TokenAddress></TokenAddress>
+    // </div>
+    // <Footer></Footer>
+    // </>
+
+
+// <>
+//     <Box height="100vh" overflowY="auto">
+
+// <div className="App" style={{display:'flex'}}>
+//       <Sidebar></Sidebar>
+//       <TokenAddress></TokenAddress>
+//     </div>
+// </Box>
+
+
+// <Box
+// border="1px solid black"
+// width="100%"
+// height="75px"
+// flexShrink="0"
+// background="#F30050"
+// position="fixed"
+// bottom="0"
+// left="0"
+// >
+
+// <Footer></Footer>
+// </Box>
+// </>
+
+<>
+<Box height="88vh" overflowY="auto">
+  <Sidebar />
+  <TokenAddress/>
+</Box>
+
+<Footer />
+</>
+
+
+
+
   );
 }
 
