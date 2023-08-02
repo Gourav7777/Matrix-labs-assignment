@@ -4,18 +4,64 @@ import {Box, Text} from "@chakra-ui/react"
 import {  InputGroup, InputLeftElement, InputRightElement, Input , Button, Flex} from "@chakra-ui/react"
 import { SearchIcon } from "@chakra-ui/icons";
 import { useState } from 'react';
+import axios from 'axios'
 const TokenAddress = () => {
   
     const [data,setData]=useState([])
+    const [searchQuery, setSearchQuery] = useState('');
+    const [endpoint,setEndpoint] = useState('0x2170Ed0880ac9A755fd29B2688956BD959F933F8,0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c')
+let timeout;
+
+    const handleDebounce = (query) => {
+        
+    
+        
+        clearTimeout(timeout);
+    
+       
+       timeout = setTimeout(() => {
+          fetchData(query);
+        }, 500);
+      };
+
+
+      const fetchData = async (query) => {
+        try {
+          const response = await axios.get(`https://api.dexscreener.com/latest/dex/search/?q=${query}`);
+        //   setData(response.data);
+        console.log(response.data.pairs)
+        const sortedData = response.data.pairs.sort((a, b) => b.priceUsd - a.priceUsd);
+
+        setData(sortedData);
+        //   setLoading(false);
+        } catch (error) {
+         
+          console.error('Error fetching data:', error);
+          
+        }
+      };
+
+
+      const handleInputChange = (event) => {
+        setSearchQuery(event.target.value);
+        handleDebounce(event.target.value);
+      };
+
 
  
     const getData=async()=>{
-      let res = await fetch(`https://api.dexscreener.com/latest/dex/tokens/0x2170Ed0880ac9A755fd29B2688956BD959F933F8,0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c`)
+      let res = await fetch(
+        
+        // `https://api.dexscreener.com/latest/dex/tokens/0x2170Ed0880ac9A755fd29B2688956BD959F933F8,0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c`
+
+        `https://api.dexscreener.com/latest/dex/tokens/${endpoint}`
+      
+      )
       res =await res.json()
       let x = res.pairs
       setData(x)
     
-      console.log(res.pairs)
+    //   console.log(res.pairs)
     }
     useEffect(()=>{
 getData()
@@ -23,19 +69,7 @@ getData()
 
    
   return (
-    // <Box
-    //     border="0px solid black"
-    //     width="82%"
-    //     height="568px"
-    //     // flexShrink="0"
-    //     backgroundImage={`url(${backgrounddImage})`}
-    //     backgroundSize="cover"
-    //     backgroundPosition="center"
-    //     lightgray = '50%'
-    //     cover = 'no-repeat'
-    //         // paddingRight='20px'
-    //         // paddingLeft='20px'
-    //     >
+   
 
 
     <Box
@@ -51,17 +85,6 @@ getData()
       marginLeft="18%"
     >
 
-{/* <Flex
-        display="flex"
-        justifyContent="space-between"
-        alignItems='center'
-        border="0px solid white"
-        height="100px"
-        paddingRight='30px'
-            paddingLeft='30px'
-            color="var(--cultured-grey, #F7F9F9)"
-
-      > */}
 
 <Flex
         display="flex"
@@ -70,22 +93,16 @@ getData()
         border="0px solid white"
         height="100px"
         color="var(--cultured-grey, #F7F9F9)"
-        position="sticky"  // This keeps the element fixed within its container
-        top="0"           // Set the top position to 0 for the sticky effect
-        zIndex="1"        // Add a zIndex to ensure it stays above the scrollable content
-        // background="#292929" // Add the same background as the Sidebar to blend with it
+        position="sticky"  
+        top="0"           
+        zIndex="1"      
+        
       >
 
 
 
         <InputGroup width='30%' justifyContent="flex-start">
-        {/* <InputLeftElement
-          pointerEvents="none"
-          children="Search"
-          color="var(--cultured-grey, #F7F9F9)"
-          pl="9" 
-          fontWeight="700" 
-        /> */}
+      
           <Input
             type="text"
            placeholder='Search'
@@ -98,7 +115,7 @@ getData()
             fontWeight="600"
             lineHeight="normal"
             
-
+            value={searchQuery} onChange={handleInputChange}
           />
           <InputRightElement width="6rem" height="100%" pointerEvents="none">
             <SearchIcon color="gray.300" />
@@ -117,7 +134,7 @@ getData()
 
       <Box
        
-        border="1px solid white"
+        border="0px solid white"
         height="50px"
         paddingRight='30px'
             paddingLeft='30px'
@@ -139,7 +156,7 @@ getData()
     </Box>
 
 
-     <Flex  border="1px solid white"
+     <Flex  border="0px solid white"
         height="350px"
         paddingRight='30px'
             paddingLeft='30px'
@@ -164,7 +181,7 @@ getData()
         padding='10px'
           borderRadius="10px"
         background="#390554"
-          width='25%'>
+          width='26%'>
    <Text alignSelf="flex-start" fontFamily="Poppins"
         fontSize="16px"
         fontStyle="normal"
@@ -383,7 +400,7 @@ getData()
 
 <div style={{
                 display:'flex',
-                gap:'30px',
+                gap:'20px',
                 marginLeft:'30px',
                 fontFamily: 'Poppins',
                 fontSize: '15px',
